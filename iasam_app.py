@@ -818,4 +818,4 @@ def on_ui_tabs():
 
 
 block, _, _ = on_ui_tabs()[0]
-block.launch()
+block.launch(server_port=8000, server_name='0.0.0.0')
