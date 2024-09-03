@@ -13,6 +13,8 @@ class IAFileManager:
                                             datetime.now().strftime("%Y-%m-%d"))
 
         self._ia_models_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "models")
+        if os.path.exists("/stable-diffusion-cache/models/sams"):
+            self._ia_models_dir = "/stable-diffusion-cache/models/sams"
 
     @property
     def outputs_dir(self) -> str:

@@ -55,6 +55,15 @@ parser.add_argument("--sam-cpu", action="store_true", help="Perform the Segment 
 args = parser.parse_args()
 IAConfig.global_args.update(args.__dict__)
 
+inp_model_dict = {
+    "stabilityai/stable-diffusion-2-inpainting": "/stable-diffusion-cache/models/diffusers/stable-diffusion-2-inpainting",
+    "Uminosachi/dreamshaper_8Inpainting": "/stable-diffusion-cache/models/diffusers/dreamshaper_8Inpainting",
+    "Uminosachi/deliberate_v3-inpainting": "/stable-diffusion-cache/models/diffusers/deliberate_v3-inpainting",
+    "Uminosachi/realisticVisionV51_v51VAE-inpainting": "/stable-diffusion-cache/models/diffusers/realisticVisionV51_v51VAE-inpainting",
+    "Uminosachi/revAnimated_v121Inp-inpainting": "/stable-diffusion-cache/models/diffusers/revAnimated_v121Inp-inpainting",
+    "runwayml/stable-diffusion-inpainting": "/stable-diffusion-cache/models/stable-diffusion-inpainting",
+}
+
 
 @clear_cache_decorator
 def download_model(sam_model_id):
@@ -381,7 +390,10 @@ def run_inpaint(input_image, sel_mask, prompt, n_prompt, ddim_steps, cfg_scale, 
     if config_offline_inpainting:
         ia_logging.info("Run Inpainting on offline network: {}".format(str(config_offline_inpainting)))
     local_files_only = False
-    local_file_status = download_model_from_hf(inp_model_id, local_files_only=True)
+    if os.path.exists("/stable-diffusion-cache/models/stable-diffusion-inpainting"):
+        inp_model_id = inp_model_dict[inp_model_id]
+    else:
+        local_file_status = download_model_from_hf(inp_model_id, local_files_only=True)
     if local_file_status != IAFileManager.DOWNLOAD_COMPLETE:
         if config_offline_inpainting:
             ia_logging.warning(local_file_status)
